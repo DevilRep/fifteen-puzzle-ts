@@ -82,3 +82,4 @@ node_modules
 /coverage/
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/vanillajs.iml
+/dist/
