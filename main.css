@@ -1,0 +1,128 @@
+body {
+    background-color: #F5FEC0;
+}
+
+nav {
+    background-color: #60A9A6;
+}
+
+nav .brand-logo {
+    color: #F5FEC0;
+}
+
+.content {
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.field {
+    width: 498px;
+    height: 498px;
+    background-color: #60A9A6;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    border-radius: 0;
+    padding: 1px;
+}
+
+.cell {
+    font-size: xxx-large;
+    width: 122px;
+    color: #60A9A6;
+    background-color: #CAF2D7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: -webkit-box-shadow .25s;
+    transition: -webkit-box-shadow .25s;
+    transition: box-shadow .25s, -webkit-box-shadow .25s;
+    margin: 1px;
+}
+
+.in-game .cell {
+    cursor: pointer;
+}
+
+.animate__animated {
+    --animate-duration: 0.5s;
+}
+
+.animate__fast {
+    --animate-duration: 0.1s;
+}
+
+.cell1 {
+    order: 1;
+}
+
+.cell2 {
+    order: 2;
+}
+
+.cell3 {
+    order: 3;
+}
+
+.cell4 {
+    order: 4;
+}
+
+.cell5 {
+    order: 5;
+}
+
+.cell6 {
+    order: 6;
+}
+
+.cell7 {
+    order: 7;
+}
+
+.cell8 {
+    order: 8;
+}
+
+.cell9 {
+    order: 9;
+}
+
+.cell10 {
+    order: 10;
+}
+
+.cell11 {
+    order: 11;
+}
+
+.cell12 {
+    order: 12;
+}
+
+.cell13 {
+    order: 13;
+}
+
+.cell14 {
+    order: 14;
+}
+
+.cell15 {
+    order: 15;
+}
+
+.cell16 {
+    order: 16;
+}
+
+.unoccupied {
+    opacity: 0;
+    cursor: default;
+}
+
+.new-game {
+    cursor: pointer;
+}

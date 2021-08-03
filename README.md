@@ -26,7 +26,9 @@ This project was created to test a new technologies, try different solutions and
 
 
 ## Setup
-Just open the index.html in your browser
+- Clone the repo
+- run yarn
+- open the index.html in your browser
 
 
 ## Usage

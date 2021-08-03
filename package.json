@@ -9,7 +9,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "yarn run build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
