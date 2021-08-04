@@ -1,6 +1,7 @@
 import CallbacksList from './interfaces/CallbacksList'
+import {default as IEventBus} from './interfaces/EventBus'
 
-export default class EventBus {
+export default class EventBus implements IEventBus {
     protected callbacks: CallbacksList = {}
 
     on(name: string, callback: Function): void {

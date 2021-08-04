@@ -1,45 +1,45 @@
 import EventBus from '../src/EventBus'
 
-test('Creating object: no callbacks', () => {
+test('creating object: no callbacks', () => {
     const eventBus: EventBus = new EventBus()
     expect(eventBus.countCallbacks()).toBe(0)
 })
 
-test('Adding a new event callback', () => {
+test('adding a new event callback', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test', () => {})
     expect(eventBus.countCallbacks()).toBe(1)
 })
 
-test('Adding a few event callbacks on different events: did all callbacks add?', () => {
+test('adding a few event callbacks on different events: did all callbacks add?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test2', () => {})
     expect(eventBus.countCallbacks()).toBe(2)
 })
 
-test('Adding a few event callbacks on different events: did callbacks bind to different events?', () => {
+test('adding a few event callbacks on different events: did callbacks bind to different events?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test2', () => {})
     expect(eventBus.countCallbacks('test1')).toBe(1)
 })
 
-test('Adding a few event callbacks on the same event: did all callbacks add?', () => {
+test('adding a few event callbacks on the same event: did all callbacks add?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test1', () => {})
     expect(eventBus.countCallbacks()).toBe(2)
 })
 
-test('Adding a few event callbacks on the same event: did callbacks bind to the same event?', () => {
+test('adding a few event callbacks on the same event: did callbacks bind to the same event?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test1', () => {})
     expect(eventBus.countCallbacks('test1')).toBe(2)
 })
 
-test('Removing all callbacks by event name: did all callbacks remove?', () => {
+test('removing all callbacks by event name: did all callbacks remove?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test1', () => {})
@@ -47,7 +47,7 @@ test('Removing all callbacks by event name: did all callbacks remove?', () => {
     expect(eventBus.countCallbacks('test1')).toBe(0)
 })
 
-test('Removing all callbacks by event name: did callbacks remove only for the specific event?', () => {
+test('removing all callbacks by event name: did callbacks remove only for the specific event?', () => {
     const eventBus: EventBus = new EventBus()
     eventBus.on('test1', () => {})
     eventBus.on('test2', () => {})
@@ -55,7 +55,7 @@ test('Removing all callbacks by event name: did callbacks remove only for the sp
     expect(eventBus.countCallbacks()).toBe(1)
 })
 
-test('Triggering only one event callback', async () => {
+test('triggering only one event callback', async () => {
     const eventBus: EventBus = new EventBus()
     let isEventTriggered: boolean = false
     eventBus.on('test1', () => (isEventTriggered = true))
@@ -64,7 +64,7 @@ test('Triggering only one event callback', async () => {
     expect(isEventTriggered).toBeTruthy()
 })
 
-test('Triggering only one event callback while bind a few', async () => {
+test('triggering only one event callback while bind a few', async () => {
     const eventBus: EventBus = new EventBus()
     const isEventsTriggered: boolean[] = [false, false]
     const expected: boolean[] = [true, false]
@@ -75,7 +75,7 @@ test('Triggering only one event callback while bind a few', async () => {
     expect(isEventsTriggered).toEqual(expected)
 })
 
-test('Triggering a few event callbacks', async () => {
+test('triggering a few event callbacks', async () => {
     const eventBus: EventBus = new EventBus()
     const isEventsTriggered: boolean[] = [false, false]
     const expected: boolean[] = [true, true]
@@ -86,7 +86,7 @@ test('Triggering a few event callbacks', async () => {
     expect(isEventsTriggered).toEqual(expected)
 })
 
-test('Triggering an event callback several times', async () => {
+test('triggering an event callback several times', async () => {
     const eventBus: EventBus = new EventBus()
     let eventTriggeredCount: number = 0
     eventBus.on('test1', () => (eventTriggeredCount++))
@@ -97,7 +97,7 @@ test('Triggering an event callback several times', async () => {
     expect(eventTriggeredCount).toBe(2)
 })
 
-test('Triggering an event callback with params', async () => {
+test('triggering an event callback with params', async () => {
     const eventBus: EventBus = new EventBus()
     let updatedValue: string = ''
     eventBus.on('test1', (parameter1: number, parameter2: string) =>
