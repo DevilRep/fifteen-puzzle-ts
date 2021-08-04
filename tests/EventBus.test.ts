@@ -96,3 +96,14 @@ test('Triggering an event callback several times', async () => {
     await new Promise((resolve: Function) => setTimeout(resolve, 500))
     expect(eventTriggeredCount).toBe(2)
 })
+
+test('Triggering an event callback with params', async () => {
+    const eventBus: EventBus = new EventBus()
+    let updatedValue: string = ''
+    eventBus.on('test1', (parameter1: number, parameter2: string) =>
+        (updatedValue = parameter2 + '-' + (parameter1 ? parameter1.toString() : ''))
+    )
+    eventBus.emit('test1', 10, 'test')
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
+    expect(updatedValue).toBe('test-10')
+})

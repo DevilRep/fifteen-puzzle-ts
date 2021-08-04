@@ -17,7 +17,8 @@ export default class EventBus {
         this.callbacks[name] = []
     }
 
-    emit(name: string): void {
+    emit(name: string, ...args: any[]): void {
+        args = args || 'test'
         if (!(name in this.callbacks)) {
             return
         }
