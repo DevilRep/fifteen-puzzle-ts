@@ -18,11 +18,10 @@ export default class EventBus {
     }
 
     emit(name: string, ...args: any[]): void {
-        args = args || 'test'
         if (!(name in this.callbacks)) {
             return
         }
-        this.callbacks[name].forEach((callback: Function) => setTimeout(callback, 0))
+        this.callbacks[name].forEach((callback: Function) => setTimeout(() => callback(...args), 0))
     }
 
     countCallbacks(name?: string): number {
