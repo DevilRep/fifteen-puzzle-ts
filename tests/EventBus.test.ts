@@ -60,7 +60,8 @@ test('Triggering only one event callback', async () => {
     let isEventTriggered: boolean = false
     eventBus.on('test1', () => (isEventTriggered = true))
     eventBus.emit('test1')
-    await new Promise(() => setTimeout(() => expect(isEventTriggered).toBeTruthy(), 500))
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
+    expect(isEventTriggered).toBeTruthy()
 })
 
 test('Triggering only one event callback while bind a few', async () => {
@@ -70,7 +71,8 @@ test('Triggering only one event callback while bind a few', async () => {
     eventBus.on('test1', () => (isEventsTriggered[0] = true))
     eventBus.on('test2', () => (isEventsTriggered[1] = true))
     eventBus.emit('test1')
-    await new Promise(() => setTimeout(() => expect(isEventsTriggered).toEqual(expected), 500))
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
+    expect(isEventsTriggered).toEqual(expected)
 })
 
 test('Triggering a few event callbacks', async () => {
@@ -80,7 +82,8 @@ test('Triggering a few event callbacks', async () => {
     eventBus.on('test1', () => (isEventsTriggered[0] = true))
     eventBus.on('test1', () => (isEventsTriggered[1] = true))
     eventBus.emit('test1')
-    await new Promise(() => setTimeout(() => expect(isEventsTriggered).toEqual(expected), 500))
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
+    expect(isEventsTriggered).toEqual(expected)
 })
 
 test('Triggering an event callback several times', async () => {
@@ -88,7 +91,8 @@ test('Triggering an event callback several times', async () => {
     let eventTriggeredCount: number = 0
     eventBus.on('test1', () => (eventTriggeredCount++))
     eventBus.emit('test1')
-    await new Promise(() => setTimeout(() => {}, 500))
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
     eventBus.emit('test1')
-    await new Promise(() => setTimeout(() => expect(eventTriggeredCount).toBe(2), 500))
+    await new Promise((resolve: Function) => setTimeout(resolve, 500))
+    expect(eventTriggeredCount).toBe(2)
 })
