@@ -2,22 +2,24 @@ import FieldView from '../src/FieldView'
 import CellViewFactory from '../src/CellViewFactory'
 
 const template = `
-    <div class="cell cell1"></div>
-    <div class="cell cell2"></div>
-    <div class="cell cell3"></div>
-    <div class="cell cell4"></div>
-    <div class="cell cell5"></div>
-    <div class="cell cell6"></div>
-    <div class="cell cell7"></div>
-    <div class="cell cell8"></div>
-    <div class="cell cell9"></div>
-    <div class="cell cell10"></div>
-    <div class="cell cell11"></div>
-    <div class="cell cell12"></div>
-    <div class="cell cell13"></div>
-    <div class="cell cell14"></div>
-    <div class="cell cell15"></div>
-    <div class="cell cell16"></div>
+    <div class="field">
+        <div class="cell cell1"></div>
+        <div class="cell cell2"></div>
+        <div class="cell cell3"></div>
+        <div class="cell cell4"></div>
+        <div class="cell cell5"></div>
+        <div class="cell cell6"></div>
+        <div class="cell cell7"></div>
+        <div class="cell cell8"></div>
+        <div class="cell cell9"></div>
+        <div class="cell cell10"></div>
+        <div class="cell cell11"></div>
+        <div class="cell cell12"></div>
+        <div class="cell cell13"></div>
+        <div class="cell cell14"></div>
+        <div class="cell cell15"></div>
+        <div class="cell cell16"></div>
+    </div>
     `
 
 test('creating a field: are all cells on the field?', () => {
@@ -40,9 +42,18 @@ test('creating a field: was added the class `in-game`?', () => {
     expect(fieldElement.classList.contains('in-game')).toBeFalsy()
 })
 
+test('starting a new game: was added the class `in-game`?', async () => {
+    document.body.innerHTML = template
+    const field: FieldView = new FieldView(new CellViewFactory())
+    await field.newGame()
+    const fieldElement: Element = document.querySelector('.field')!
+    expect(fieldElement.classList.contains('in-game')).toBeTruthy()
+})
+
 test('moving a cell: was changed the free cell position?', async () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
+    await field.newGame()
     const freeCell: Element = document.querySelector('.freeCell')!
     let freeCellPosition: number = 0
     freeCell.classList.forEach(className => {
@@ -72,13 +83,13 @@ test('moving a cell: was changed the free cell position?', async () => {
                 freeCellPosition = +className.slice(4)
         }
     })
-    field.toString()
     expect(freeCellPosition).toBe(selectedCell)
 })
 
 test('moving a cell: was changed the selected cell position?', async () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
+    await field.newGame()
     const freeCell: Element = document.querySelector('.freeCell')!
     let freeCellPosition: number = 0
     freeCell.classList.forEach(className => {
@@ -108,13 +119,13 @@ test('moving a cell: was changed the selected cell position?', async () => {
                 freeCellPosition = +className.slice(4)
         }
     })
-    field.toString()
     expect(selectedCell).toBe(freeCellPosition)
 })
 
 test('moving a cell: was a new game started?', async () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
+    await field.newGame()
     const freeCell: Element = document.querySelector('.freeCell')!
     let freeCellPosition: number = 0
     freeCell.classList.forEach(className => {
@@ -150,6 +161,7 @@ test('moving a cell: was a new game started?', async () => {
 test('moving a cell: was added the class `in-game`?', async () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
+    await field.newGame()
     const freeCell: Element = document.querySelector('.freeCell')!
     let freeCellPosition: number = 0
     freeCell.classList.forEach(className => {
@@ -179,7 +191,6 @@ test('moving a cell: was added the class `in-game`?', async () => {
                 freeCellPosition = +className.slice(4)
         }
     })
-    field.toString()
     const fieldElement: Element = document.querySelector('.field')!
-    expect(fieldElement.classList.contains('in-game')).toBeFalsy()
+    expect(fieldElement.classList.contains('in-game')).toBeTruthy()
 })
