@@ -121,3 +121,51 @@ test('stop moving the cell', async () => {
     await cell.move(2)
     expect(eventNames).toEqual(['move:start', 'move:end'])
 })
+
+test('testing work with DOM: start position was set', () => {
+    document.body.innerHTML = '<div class="cell"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    cell.on('move:start', () => {})
+    const element: Element = document.querySelector('.cell')!
+    expect(element.classList.contains('cell6')).toBeTruthy()
+})
+
+test('testing work with DOM: animation was added', () => {
+    document.body.innerHTML = '<div class="cell"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    cell.move(2) // there shouldn't be await - the animation works only when a cell is moving
+    expect(element.classList.contains('animate__slideOutUp')).toBeTruthy()
+})
+
+test('testing work with DOM: animation was removed', async () => {
+    document.body.innerHTML = '<div class="cell"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    await cell.move(2)
+    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
+})
+
+test('testing work with DOM: end position was set', async () => {
+    document.body.innerHTML = '<div class="cell"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    await cell.move(2)
+    expect(element.classList.contains('cell2')).toBeTruthy()
+})
