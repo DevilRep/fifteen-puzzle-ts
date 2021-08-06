@@ -20,6 +20,6 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^0.x"
+    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^1.x"
   }
 }
