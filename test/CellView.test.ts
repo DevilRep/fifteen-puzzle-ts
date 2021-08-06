@@ -11,18 +11,6 @@ test('adding event callback', () => {
     expect(hasEventCallback).toBeTruthy()
 })
 
-test('triggering event callback', () => {
-    let isEventTriggered: boolean = false
-    const cell: CellView = new CellView(1, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void { isEventTriggered = true }
-    })
-    cell.on('test1', () => {})
-    cell.emit('test1')
-    expect(isEventTriggered).toBeTruthy()
-})
-
 test('removing callback ', () => {
     let isEventCallbackRemoved: boolean = false
     const cell: CellView = new CellView(1, 'test', {
@@ -33,4 +21,88 @@ test('removing callback ', () => {
     cell.on('test1', () => {})
     cell.off('test1')
     expect(isEventCallbackRemoved).toBeTruthy()
+})
+
+test('moving the cell', () => {
+    let eventNames: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name): void {
+            eventNames.push(name)
+        }
+    })
+    cell.on('move:start', () => {})
+    cell.move(2)
+    expect(eventNames).toEqual(['move:start'])
+})
+
+test('moving the cell up', () => {
+    let directions: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name, direction: string): void {
+            directions.push(name + ':' + direction)
+        }
+    })
+    cell.on('move:start', () => {})
+    cell.move(2)
+    expect(directions).toEqual(['move:start:up'])
+})
+
+test('moving the cell down', () => {
+    let directions: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name, direction: string): void {
+            directions.push(name + ':' + direction)
+        }
+    })
+    cell.on('move:start', () => {})
+    cell.move(10)
+    expect(directions).toEqual(['move:start:down'])
+})
+
+test('moving the cell left', () => {
+    let directions: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name, direction: string): void {
+            directions.push(name + ':' + direction)
+        }
+    })
+    cell.on('move:start', () => {})
+    cell.move(5)
+    expect(directions).toEqual(['move:start:left'])
+})
+
+test('moving the cell right', () => {
+    let directions: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name, direction: string): void {
+            directions.push(name + ':' + direction)
+        }
+    })
+    cell.on('move:start', () => {})
+    cell.move(7)
+    expect(directions).toEqual(['move:start:right'])
+})
+
+test('stop moving the cell', () => {
+    let eventNames: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name): void {
+            eventNames.push(name)
+        }
+    })
+    cell.on('move:end', () => {})
+    cell.move(2)
+    expect(eventNames).toEqual(['move:end'])
 })

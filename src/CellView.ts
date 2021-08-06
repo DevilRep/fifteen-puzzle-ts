@@ -1,7 +1,7 @@
 import {Cell} from 'fifteen-puzzle-core'
 import {default as IEventBus} from './interfaces/EventBus'
 
-export default class CellView extends Cell implements IEventBus {
+export default class CellView extends Cell {
     protected eventBus: IEventBus
 
     constructor(realPosition: number, data: string, eventBus: IEventBus) {
@@ -19,11 +19,5 @@ export default class CellView extends Cell implements IEventBus {
 
         name = name || 'test'
         //this.eventBus.off(name)
-    }
-
-    emit(name: string, ...args: any[]) {
-        name = name || 'test'
-        args = args || 'test'
-        //this.eventBus.emit(name, ...args)
     }
 }
