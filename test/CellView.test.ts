@@ -177,3 +177,19 @@ test('testing work with DOM: end position was set', async () => {
     await cell.move(2)
     expect(element.classList.contains('cell2')).toBeTruthy()
 })
+
+test('clicking on a cell', () => {
+    document.body.innerHTML = '<div class="cell cell6"></div>'
+    const events: string[] = []
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name): void {
+            events.push(name)
+        }
+    })
+    cell.on('move:start', () => {})
+    const element: Element = document.querySelector('.cell')!
+    element.dispatchEvent(new Event('click'))
+    expect(events).toEqual(['click'])
+})
