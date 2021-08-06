@@ -10,14 +10,32 @@ export default class CellView extends Cell {
     }
 
     on(name: string, callback: Function) {
-        name = name || 'test'
-        callback = callback || 'test'
-        //this.eventBus.on(name, callback)
+        this.eventBus.on(name, callback)
     }
 
     off(name: string) {
+        this.eventBus.off(name)
+    }
 
-        name = name || 'test'
-        //this.eventBus.off(name)
+    async move(newPosition: number): Promise<void> {
+        let direction: string
+        const difference: number = newPosition - this.position
+        switch (difference) {
+            case -1:
+                direction = 'left'
+                break
+            case 1:
+                direction = 'right'
+                break
+            default:
+                if (difference > 0) {
+                    direction = 'down'
+                    break
+                }
+                direction = 'up'
+        }
+        this.eventBus.emit('move:start', direction)
+        await super.move(newPosition)
+        this.eventBus.emit('move:end')
     }
 }

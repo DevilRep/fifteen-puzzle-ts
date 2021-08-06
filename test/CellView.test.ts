@@ -23,77 +23,92 @@ test('removing callback ', () => {
     expect(isEventCallbackRemoved).toBeTruthy()
 })
 
-test('moving the cell', () => {
+test('moving the cell', async () => {
     let eventNames: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(name): void {
+            if (eventNames.length) {
+                return
+            }
             eventNames.push(name)
         }
     })
     cell.on('move:start', () => {})
-    cell.move(2)
+    await cell.move(2)
     expect(eventNames).toEqual(['move:start'])
 })
 
-test('moving the cell up', () => {
+test('moving the cell up', async () => {
     let directions: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(name, direction: string): void {
+            if (directions.length) {
+                return
+            }
             directions.push(name + ':' + direction)
         }
     })
     cell.on('move:start', () => {})
-    cell.move(2)
+    await cell.move(2)
     expect(directions).toEqual(['move:start:up'])
 })
 
-test('moving the cell down', () => {
+test('moving the cell down', async () => {
     let directions: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(name, direction: string): void {
+            if (directions.length) {
+                return
+            }
             directions.push(name + ':' + direction)
         }
     })
     cell.on('move:start', () => {})
-    cell.move(10)
+    await cell.move(10)
     expect(directions).toEqual(['move:start:down'])
 })
 
-test('moving the cell left', () => {
+test('moving the cell left', async () => {
     let directions: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(name, direction: string): void {
+            if (directions.length) {
+                return
+            }
             directions.push(name + ':' + direction)
         }
     })
     cell.on('move:start', () => {})
-    cell.move(5)
+    await cell.move(5)
     expect(directions).toEqual(['move:start:left'])
 })
 
-test('moving the cell right', () => {
+test('moving the cell right', async () => {
     let directions: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(name, direction: string): void {
+            if (directions.length) {
+                return
+            }
             directions.push(name + ':' + direction)
         }
     })
     cell.on('move:start', () => {})
-    cell.move(7)
+    await cell.move(7)
     expect(directions).toEqual(['move:start:right'])
 })
 
-test('stop moving the cell', () => {
+test('stop moving the cell', async () => {
     let eventNames: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
@@ -103,6 +118,6 @@ test('stop moving the cell', () => {
         }
     })
     cell.on('move:end', () => {})
-    cell.move(2)
-    expect(eventNames).toEqual(['move:end'])
+    await cell.move(2)
+    expect(eventNames).toEqual(['move:start', 'move:end'])
 })
