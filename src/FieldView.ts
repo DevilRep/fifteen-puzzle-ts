@@ -1,10 +1,10 @@
-import {Field} from 'fifteen-puzzle-core'
+import {AbstractFactoryInterface as AbstractFactory, Field} from 'fifteen-puzzle-core'
 import CellView from './CellView'
-import {AbstractFactoryInterface as AbstractFactory} from 'fifteen-puzzle-core'
+import {AnimationSpeed} from './types'
 
 export default class FieldView extends Field {
     protected element: Element = <Element>{}
-    protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 1
+    protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 10
 
     constructor(factory: AbstractFactory) {
         super(factory)
@@ -12,11 +12,21 @@ export default class FieldView extends Field {
     }
 
     protected init() {
+        this.cells.forEach(cell => {
+            const cellView: CellView = <CellView>cell
+            cellView.off('click')
+        })
         super.init()
         this.cells.forEach(cell => {
             const cellView: CellView = <CellView>cell
-            cellView.on('click', () => this.move(cell.position))
+            cellView.on('click', async() => await this.move(cell.position))
         })
+        this.cells.forEach(cell => {
+            const cellView: CellView = <CellView>cell
+            cellView.animationSpeed = AnimationSpeed.Fast
+        })
+        const cellView: CellView = <CellView>this.freeCell
+        cellView.animationSpeed = AnimationSpeed.Fast
     }
 
     protected bindElement(): void {
@@ -30,6 +40,12 @@ export default class FieldView extends Field {
     async newGame(): Promise<void> {
         const result = await super.newGame()
         this.element.classList.add('in-game')
+        this.cells.forEach(cell => {
+            const cellView: CellView = <CellView>cell
+            cellView.animationSpeed = AnimationSpeed.Default
+        })
+        const cellView: CellView = <CellView>this.freeCell
+        cellView.animationSpeed = AnimationSpeed.Default
         return result
     }
 

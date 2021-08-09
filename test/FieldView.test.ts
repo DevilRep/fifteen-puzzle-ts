@@ -63,7 +63,7 @@ test('moving a cell: was changed the free cell position?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = freeCellPosition - 4 // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
@@ -99,7 +99,7 @@ test('moving a cell: was changed the selected cell position?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = freeCellPosition - 4 // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
@@ -135,7 +135,7 @@ test('moving a cell: was added the class `in-game`?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = freeCellPosition - 4 // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))

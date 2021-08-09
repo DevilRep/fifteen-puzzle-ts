@@ -3,7 +3,7 @@ import {AnimationSpeed} from '../src/types'
 
 test('adding event callback', () => {
     let hasEventCallback: boolean = false
-    document.body.innerHTML = '<div class="cell cell1"></div>'
+    document.body.innerHTML = '<div><div class="cell cell1"></div></div>'
     const cell: CellView = new CellView(1, 'test', {
         on(): void { hasEventCallback = true },
         off(): void {},
@@ -15,7 +15,7 @@ test('adding event callback', () => {
 
 test('removing callback ', () => {
     let isEventCallbackRemoved: boolean = false
-    document.body.innerHTML = '<div class="cell cell1"></div>'
+    document.body.innerHTML = '<div><div class="cell cell1"></div></div>'
     const cell: CellView = new CellView(1, 'test', {
         on(): void {},
         off(): void { isEventCallbackRemoved = true },
@@ -28,7 +28,7 @@ test('removing callback ', () => {
 
 test('moving the cell', async () => {
     let eventNames: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -46,7 +46,7 @@ test('moving the cell', async () => {
 
 test('moving the cell up', async () => {
     let directions: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -64,7 +64,7 @@ test('moving the cell up', async () => {
 
 test('moving the cell down', async () => {
     let directions: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -82,7 +82,7 @@ test('moving the cell down', async () => {
 
 test('moving the cell left', async () => {
     let directions: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -100,7 +100,7 @@ test('moving the cell left', async () => {
 
 test('moving the cell right', async () => {
     let directions: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -118,7 +118,7 @@ test('moving the cell right', async () => {
 
 test('stop moving the cell', async () => {
     let eventNames: string[] = []
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -132,7 +132,7 @@ test('stop moving the cell', async () => {
 })
 
 test('testing work with DOM: start position was set', () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -144,7 +144,7 @@ test('testing work with DOM: start position was set', () => {
 })
 
 test('testing work with DOM: animation was added', () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -156,7 +156,7 @@ test('testing work with DOM: animation was added', () => {
 })
 
 test('testing work with DOM: animation was removed', async () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -168,7 +168,7 @@ test('testing work with DOM: animation was removed', async () => {
 })
 
 test('testing work with DOM: end position was set', async () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -180,7 +180,7 @@ test('testing work with DOM: end position was set', async () => {
 })
 
 test('clicking on a cell', () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const events: string[] = []
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
@@ -196,7 +196,7 @@ test('clicking on a cell', () => {
 })
 
 test('updating animation speed to fast', async () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
@@ -209,7 +209,7 @@ test('updating animation speed to fast', async () => {
 })
 
 test('updating animation speed: are changes work?', async () => {
-    document.body.innerHTML = '<div class="cell cell6"></div>'
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},

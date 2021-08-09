@@ -10,12 +10,25 @@ export default class CellView extends Cell {
     constructor(realPosition: number, data: string, eventBus: IEventBus) {
         super(realPosition, data)
         this.eventBus = eventBus
+        this.clearElementListeners(realPosition)
         const element = document.querySelector(`.cell${realPosition}`)
         if (!element) {
             throw new Error('Something went wrong')
         }
         this.element = element
-        element.addEventListener('click', () => this.eventBus.emit('click'))
+        this.element.addEventListener('click', () => this.eventBus.emit('click'))
+    }
+
+    protected clearElementListeners(realPosition: number) {
+        let element = document.querySelector(`.cell${realPosition}`)
+        if (!element) {
+            throw new Error('Something went wrong')
+        }
+        const clone = element.cloneNode(true)
+        if (!element.parentNode) {
+            throw new Error('Something went wrong')
+        }
+        element.parentNode.replaceChild(clone, element)
     }
 
     on(name: string, callback: Function) {

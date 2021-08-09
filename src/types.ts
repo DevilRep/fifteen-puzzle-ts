@@ -5,7 +5,7 @@ export enum MovingDirection {
     Right = 'right'
 }
 
-export enum AnimationSpeed {
-    Default = 1000,
-    Fast = 100
+export enum AnimationSpeed {  // speed in ms
+    Default = 1000 * 0.5,
+    Fast = 1000 * 0.1
 }
