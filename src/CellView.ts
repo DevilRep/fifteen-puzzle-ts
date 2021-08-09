@@ -1,6 +1,6 @@
 import {Cell} from 'fifteen-puzzle-core'
 import {default as IEventBus} from './interfaces/EventBus'
-import {MovingDirection} from './types'
+import {AnimationSpeed, MovingDirection} from './types'
 
 export default class CellView extends Cell {
     protected eventBus: IEventBus
@@ -58,5 +58,9 @@ export default class CellView extends Cell {
         this.eventBus.emit('move:end')
         this.element.classList.remove(`cell${oldPosition}`)
         this.element.classList.add(`cell${newPosition}`)
+    }
+
+    set animationSpeed(value: AnimationSpeed) {
+        value = value | AnimationSpeed.Default
     }
 }

@@ -1,4 +1,5 @@
 import CellView from '../src/CellView'
+import {AnimationSpeed} from '../src/types'
 
 test('adding event callback', () => {
     let hasEventCallback: boolean = false
@@ -192,4 +193,35 @@ test('clicking on a cell', () => {
     const element: Element = document.querySelector('.cell')!
     element.dispatchEvent(new Event('click'))
     expect(events).toEqual(['click'])
+})
+
+test('updating animation speed to fast', async () => {
+    document.body.innerHTML = '<div class="cell cell6"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    cell.animationSpeed = AnimationSpeed.Fast
+    const timeWas = Date.now()
+    await cell.move(2)
+    expect(Date.now() - timeWas - AnimationSpeed.Fast).toBeLessThan(50)
+})
+
+test('updating animation speed: are changes work?', async () => {
+    document.body.innerHTML = '<div class="cell cell6"></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    cell.animationSpeed = AnimationSpeed.Default
+    let timeWas: number = Date.now()
+    await cell.move(2)
+    const defaultSpeedDuration = Date.now() - timeWas
+    cell.animationSpeed = AnimationSpeed.Fast
+    timeWas = Date.now()
+    await cell.move(2)
+    const fastSpeedDuration = Date.now() - timeWas
+    expect(defaultSpeedDuration - fastSpeedDuration).toBeGreaterThan(100)
 })
