@@ -4,7 +4,7 @@ import {AnimationSpeed} from './types'
 
 export default class FieldView extends Field {
     protected element: Element = <Element>{}
-    protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 10
+    protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 30
 
     constructor(factory: AbstractFactory) {
         super(factory)
