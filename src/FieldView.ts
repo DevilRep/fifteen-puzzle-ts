@@ -11,6 +11,14 @@ export default class FieldView extends Field {
         this.bindElement()
     }
 
+    protected init() {
+        super.init()
+        this.cells.forEach(cell => {
+            const cellView: CellView = <CellView>cell
+            cellView.on('click', () => this.move(cell.position))
+        })
+    }
+
     protected bindElement(): void {
         const element = document.querySelector('.field')
         if (!element) {

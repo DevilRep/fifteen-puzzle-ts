@@ -73,7 +73,7 @@ test('moving a cell: was changed the free cell position?', async () => {
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
-    await new Promise((resolve: Function) => setTimeout(resolve, 1000))
+    await new Promise((resolve: Function) => setTimeout(resolve, 1100))
     freeCell.classList.forEach(className => {
         switch (className) {
             case 'cell':
@@ -109,7 +109,7 @@ test('moving a cell: was changed the selected cell position?', async () => {
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
-    await new Promise((resolve: Function) => setTimeout(resolve, 1000))
+    await new Promise((resolve: Function) => setTimeout(resolve, 1100))
     freeCell.classList.forEach(className => {
         switch (className) {
             case 'cell':
@@ -145,7 +145,7 @@ test('moving a cell: was a new game started?', async () => {
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
-    await new Promise((resolve: Function) => setTimeout(resolve, 1000))
+    await new Promise((resolve: Function) => setTimeout(resolve, 1100))
     freeCell.classList.forEach(className => {
         switch (className) {
             case 'cell':
@@ -181,7 +181,7 @@ test('moving a cell: was added the class `in-game`?', async () => {
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
-    await new Promise((resolve: Function) => setTimeout(resolve, 1000))
+    await new Promise((resolve: Function) => setTimeout(resolve, 1100))
     freeCell.classList.forEach(className => {
         switch (className) {
             case 'cell':

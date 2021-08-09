@@ -14,6 +14,7 @@ export default class CellView extends Cell {
             throw new Error('Something went wrong')
         }
         this.element = element
+        element.addEventListener('click', () => this.eventBus.emit('click'))
     }
 
     on(name: string, callback: Function) {
