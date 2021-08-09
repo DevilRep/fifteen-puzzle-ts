@@ -1,5 +1,6 @@
 import {Cell} from 'fifteen-puzzle-core'
 import {default as IEventBus} from './interfaces/EventBus'
+import {MovingDirection} from './types'
 
 export default class CellView extends Cell {
     protected eventBus: IEventBus
@@ -34,21 +35,21 @@ export default class CellView extends Cell {
     }
 
     async move(newPosition: number): Promise<void> {
-        let direction: string
+        let direction: MovingDirection
         const difference: number = newPosition - this.position
         switch (difference) {
             case -1:
-                direction = 'left'
+                direction = MovingDirection.Left
                 break
             case 1:
-                direction = 'right'
+                direction = MovingDirection.Right
                 break
             default:
                 if (difference > 0) {
-                    direction = 'down'
+                    direction = MovingDirection.Down
                     break
                 }
-                direction = 'up'
+                direction = MovingDirection.Up
         }
         this.eventBus.emit('move:start', direction)
         await this.animate('animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1))
