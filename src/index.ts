@@ -1,6 +1,6 @@
 import FieldView from './FieldView'
 import CellViewFactory from './CellViewFactory'
-import './../main.css'
+import '../css/main.css'
 
 const field: FieldView = new FieldView(new CellViewFactory())
 

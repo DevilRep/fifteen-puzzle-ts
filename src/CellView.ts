@@ -64,11 +64,9 @@ export default class CellView extends Cell {
                 }
                 direction = MovingDirection.Up
         }
-        this.eventBus.emit('move:start', direction)
         const oldPosition: number = this.position
         await super.move(newPosition)
         await this.animate('animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1))
-        this.eventBus.emit('move:end')
         this.element.classList.remove(`cell${oldPosition}`)
         this.element.classList.add(`cell${newPosition}`)
     }
