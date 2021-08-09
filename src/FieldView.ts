@@ -1,4 +1,4 @@
-import {AbstractFactoryInterface as AbstractFactory, Field} from 'fifteen-puzzle-core'
+import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cell} from 'fifteen-puzzle-core'
 import CellView from './CellView'
 import {AnimationSpeed} from './types'
 
@@ -12,16 +12,12 @@ export default class FieldView extends Field {
     }
 
     protected init() {
-        this.cells.forEach(cell => {
+        this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.off('click')
         })
         super.init()
-        this.cells.forEach(cell => {
-            const cellView: CellView = <CellView>cell
-            cellView.on('click', async() => await this.move(cell.position))
-        })
-        this.cells.forEach(cell => {
+        this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.animationSpeed = AnimationSpeed.Fast
         })
@@ -39,8 +35,12 @@ export default class FieldView extends Field {
 
     async newGame(): Promise<void> {
         const result = await super.newGame()
+        this.cells.forEach((cell: Cell) => {
+            const cellView: CellView = <CellView>cell
+            cellView.on('click', async() => await this.move(cell.position))
+        })
         this.element.classList.add('in-game')
-        this.cells.forEach(cell => {
+        this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.animationSpeed = AnimationSpeed.Default
         })
@@ -50,7 +50,9 @@ export default class FieldView extends Field {
     }
 
     async move(cellPosition: number): Promise<void> {
-        await super.move(cellPosition)
+        try {
+            await super.move(cellPosition)
+        } catch(error) {}
         if (this.isWon) {
             this.won()
         }
@@ -58,7 +60,7 @@ export default class FieldView extends Field {
 
     protected won() {
         alert('Congratulations! You won!')
-        this.cells.forEach(cell => {
+        this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.off('click')
         })
