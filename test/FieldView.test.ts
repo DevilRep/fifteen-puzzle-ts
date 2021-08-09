@@ -18,7 +18,7 @@ const template = `
         <div class="cell cell13"></div>
         <div class="cell cell14"></div>
         <div class="cell cell15"></div>
-        <div class="cell cell16"></div>
+        <div class="cell cell16 freeCell"></div>
     </div>
     `
 
@@ -69,7 +69,7 @@ test('moving a cell: was changed the free cell position?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 2) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
@@ -105,7 +105,7 @@ test('moving a cell: was changed the selected cell position?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 2) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
@@ -141,7 +141,7 @@ test('moving a cell: was a new game started?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 2) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
