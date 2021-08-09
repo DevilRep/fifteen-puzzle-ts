@@ -28,12 +28,6 @@ test('creating a field: are all cells on the field?', () => {
     expect(field.toString()).toBe('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16')
 })
 
-test('creating a field: was a new game started?', () => {
-    document.body.innerHTML = template
-    const field: FieldView = new FieldView(new CellViewFactory())
-    expect(field.isNewGame).toBeTruthy()
-})
-
 test('creating a field: was added the class `in-game`?', () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
@@ -122,42 +116,6 @@ test('moving a cell: was changed the selected cell position?', async () => {
     expect(selectedCell).toBe(freeCellPosition)
 })
 
-test('moving a cell: was a new game started?', async () => {
-    document.body.innerHTML = template
-    const field: FieldView = new FieldView(new CellViewFactory())
-    await field.newGame()
-    const freeCell: Element = document.querySelector('.freeCell')!
-    let freeCellPosition: number = 0
-    freeCell.classList.forEach(className => {
-        switch (className) {
-            case 'cell':
-            case 'freeCell':
-                return
-            default:
-                freeCellPosition = +className.slice(4)
-        }
-    })
-    let selectedCell: number
-    if (freeCellPosition <= 4) { // can move cell up
-        selectedCell = freeCellPosition + 4
-    } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
-    }
-    const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
-    selectedCellElement.dispatchEvent(new Event('click'))
-    await new Promise((resolve: Function) => setTimeout(resolve, 1100))
-    freeCell.classList.forEach(className => {
-        switch (className) {
-            case 'cell':
-            case 'freeCell':
-                return
-            default:
-                freeCellPosition = +className.slice(4)
-        }
-    })
-    expect(field.isNewGame).toBeFalsy()
-})
-
 test('moving a cell: was added the class `in-game`?', async () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellViewFactory())
@@ -177,7 +135,7 @@ test('moving a cell: was added the class `in-game`?', async () => {
     if (freeCellPosition <= 4) { // can move cell up
         selectedCell = freeCellPosition + 4
     } else { // move down
-        selectedCell = (Math.ceil(freeCellPosition / 4) - 2) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
+        selectedCell = (Math.ceil(freeCellPosition / 4) - 1) * 4 + Math.floor(freeCellPosition % 4) // find cell under the free one
     }
     const selectedCellElement: Element = document.querySelector(`.cell${selectedCell}`)!
     selectedCellElement.dispatchEvent(new Event('click'))
