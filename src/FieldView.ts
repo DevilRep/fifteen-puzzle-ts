@@ -1,13 +1,17 @@
 import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cell} from 'fifteen-puzzle-core'
 import CellView from './CellView'
 import {AnimationSpeed} from './types'
+import {Modal} from 'materialize-css'
+import * as M from 'materialize-css'
 
 export default class FieldView extends Field {
     protected element: Element = <Element>{}
     protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 30
+    protected modal: Modal = <Modal>{}
 
     constructor(factory: AbstractFactory) {
         super(factory)
+        this.modal = M.Modal.init(document.querySelectorAll('.modal'))[0]
         this.bindElement()
     }
 
@@ -59,7 +63,7 @@ export default class FieldView extends Field {
     }
 
     protected won() {
-        alert('Congratulations! You won!')
+        this.modal.open()
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.off('click')

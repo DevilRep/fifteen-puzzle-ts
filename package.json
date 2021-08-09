@@ -30,6 +30,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^1.x"
+    "@types/materialize-css": "^1.0.11",
+    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^1.x",
+    "materialize-css": "^1.0.0"
   }
 }

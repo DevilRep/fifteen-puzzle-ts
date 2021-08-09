@@ -126,3 +126,41 @@ nav .brand-logo {
 .new-game {
     cursor: pointer;
 }
+
+.modal {
+    background: #60A9A6;
+}
+
+.modal .modal-content {
+    padding: 0;
+}
+
+.modal-content {
+    color: #60A9A6
+}
+
+.modal-content h4 {
+    background: #60A9A6;
+    margin: 0;
+    padding: 1rem 0;
+    text-align: center;
+    color: #F5FEC0;
+}
+
+.modal-content p {
+    background: #F5FEC0;
+    margin: 0;
+    padding: 1em 0;
+    text-align: center;
+}
+
+.modal .modal-footer {
+    background: #F5FEC0;
+    color: #60A9A6;
+    text-align: center;
+}
+
+.modal-footer a {
+    background: #60A9A6;
+    color: #F5FEC0;
+}
