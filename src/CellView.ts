@@ -4,7 +4,7 @@ import {AnimationSpeed, MovingDirection} from './types'
 
 export default class CellView extends Cell {
     protected eventBus: IEventBus
-    protected readonly ANIMATION_SPEED = 1000
+    protected currentAnimationSpeed: AnimationSpeed = AnimationSpeed.Default
     protected element: Element
 
     constructor(realPosition: number, data: string, eventBus: IEventBus) {
@@ -29,7 +29,7 @@ export default class CellView extends Cell {
     protected async animate(name: string): Promise<void> {
         this.element.classList.add(name)
         await new Promise((resolve: Function) => {
-            setTimeout(resolve, this.ANIMATION_SPEED)
+            setTimeout(resolve, this.currentAnimationSpeed)
         })
         this.element.classList.remove(name)
     }
@@ -61,6 +61,6 @@ export default class CellView extends Cell {
     }
 
     set animationSpeed(value: AnimationSpeed) {
-        value = value | AnimationSpeed.Default
+        this.currentAnimationSpeed = value
     }
 }
