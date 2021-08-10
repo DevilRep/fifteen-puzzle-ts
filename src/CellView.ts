@@ -19,7 +19,7 @@ export default class CellView extends Cell {
         this.element.addEventListener('click', () => this.eventBus.emit('click'))
     }
 
-    protected clearElementListeners(realPosition: number) {
+    protected clearElementListeners(realPosition: number): void {
         let element = document.querySelector(`.cell${realPosition}`)
         if (!element) {
             throw new Error('Something went wrong')
@@ -31,7 +31,7 @@ export default class CellView extends Cell {
         element.parentNode.replaceChild(clone, element)
     }
 
-    on(name: string, callback: Function) {
+    on(name: string, callback: Function): void {
         this.eventBus.on(name, callback)
     }
 
@@ -41,9 +41,7 @@ export default class CellView extends Cell {
 
     protected async animate(name: string): Promise<void> {
         this.element.classList.add(name)
-        await new Promise((resolve: Function) => {
-            setTimeout(resolve, this.currentAnimationSpeed)
-        })
+        await new Promise((resolve: Function) => setTimeout(resolve, this.currentAnimationSpeed))
         this.element.classList.remove(name)
     }
 

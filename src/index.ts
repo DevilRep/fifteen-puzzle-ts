@@ -8,6 +8,13 @@ import '../css/main.css'
 const field: FieldView = new FieldView(new CellViewFactory())
 
 const element: Element = document.querySelector('.new-game')!
+let isRunning = false
+
 element.addEventListener('click', async () => {
+    if (isRunning) {
+        return
+    }
+    isRunning = true
     await field.newGame()
+    isRunning = false
 })

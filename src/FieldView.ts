@@ -15,7 +15,22 @@ export default class FieldView extends Field {
         this.bindElement()
     }
 
+    protected initElements(): void {
+        const elements: Array<Element> = Array.from(document.getElementsByClassName('cell'))
+        elements.forEach(element => {
+            const classPosition = Array.from(element.classList)
+                .find(className => !['cell', 'animate__animated', 'freeCell'].includes(className))
+            const startPositionAttr: Attr | null = element.attributes.getNamedItem('data-index')
+            if (!classPosition || !startPositionAttr || classPosition === 'cell' + startPositionAttr.value) {
+                return
+            }
+            element.classList.remove(classPosition)
+            element.classList.add('cell' + startPositionAttr.value)
+        })
+    }
+
     protected init() {
+        this.initElements()
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.off('click')
