@@ -15,7 +15,6 @@
   "devDependencies": {
     "@types/jest": "^26.0.24",
     "@types/jsdom": "^16.2.13",
-    "@types/node": "^16.4.13",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^6.2.0",
@@ -31,6 +30,7 @@
   },
   "dependencies": {
     "@types/materialize-css": "^1.0.11",
+    "animate.css": "^4.1.1",
     "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^1.x",
     "materialize-css": "^1.0.0"
   }

@@ -18,17 +18,19 @@ This project was created to test a new technologies, try different solutions and
 
 
 ## Technologies Used
-- typescript - version 4.3.5
-- jest - version 26.0.6
-- ts-jest - version 26.0.4
-- animate - version 4.1.1
-- materialize - version 1.0.0
+- typescript - version 4.3
+- jest - version 26.0
+- ts-jest - version 26.0
+- animate - version 4.1
+- materialize - version 1.0
+- webpack - version 5.49
 
 
 ## Setup
 - Clone the repo
-- run yarn
-- open the index.html in your browser
+- run ```yarn```
+- run ```yarn serve``` to start a dev webserver with live update on ```http://localhost:3000```
+- run ```yarn build``` to create a build - then you can open the file ```dist/index.html``` in your browser
 
 
 ## Usage
