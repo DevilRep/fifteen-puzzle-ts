@@ -8,6 +8,7 @@ Rules can be found [_here_](https://en.wikipedia.org/wiki/15_puzzle)
 * [Technologies Used](#technologies-used)
 * [Setup](#setup)
 * [Usage](#usage)
+* [Versions](#versions)
 * [Tests](#tests)
 * [Project Status](#project-status)
 * [License](#license)
@@ -28,6 +29,7 @@ This project was created to test a new technologies, try different solutions and
 
 ## Setup
 - Clone the repo
+- Choose a branch or a tag (check [Versions](#versions))
 - run ```yarn```
 - run ```yarn serve``` to start a dev webserver with live update on ```http://localhost:3000```
 - run ```yarn build``` to create a build - then you can open the file ```dist/index.html``` in your browser
@@ -36,6 +38,10 @@ This project was created to test a new technologies, try different solutions and
 ## Usage
 To start the game just click on the "Fifteen puzzle" on the top
 
+
+## Versions
+There is a few different implementations of the game:
+- 1.* - using inheritance
 
 ## Tests
 To run tests use this command ```yarn test```
