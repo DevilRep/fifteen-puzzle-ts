@@ -6,6 +6,7 @@ export default class CellView extends Cell {
     protected eventBus: IEventBus
     protected element: Element
     protected newClassesForElement: string[] = []
+    protected readonly DEFAULT_NEW_CLASSES_FOR_ELEMENT: string[] = ['cell', 'animate__animated', 'freeCell']
 
     constructor(realPosition: number, data: string, eventBus: IEventBus) {
         super(realPosition, data)
@@ -62,7 +63,7 @@ export default class CellView extends Cell {
 
     async move(newPosition: number, animationClasses: string[] = []): Promise<void> {
         const direction: MovingDirection = this.direction(newPosition)
-        this.newClassesForElement = ['cell', 'animate__animated', 'freeCell']
+        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
         await this.animate(
             ['animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1)]
                 .concat(animationClasses)
