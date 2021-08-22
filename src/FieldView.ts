@@ -7,6 +7,7 @@ export default class FieldView extends Field {
     protected element: Element = <Element>{}
     protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 30
     protected modal: Modal = <Modal>{}
+    protected cellAlreadyMoved: CellView | null = null
 
     constructor(factory: AbstractFactory) {
         super(factory)
@@ -32,6 +33,7 @@ export default class FieldView extends Field {
         this.initElements()
         this.unbindEventHandlersOnCells()
         super.init()
+        this.bindMoveEndEventHandlersOnCells()
     }
 
     protected bindElement(): void {
@@ -42,12 +44,38 @@ export default class FieldView extends Field {
         this.element = element
     }
 
-    protected bindEventHandlersOnCells(): void {
+    protected createClickEventHandler(cell: Cell): Function {
+        return async (): Promise<void> => {
+            return await this.move(cell.position)
+        }
+    }
+
+    protected createMoveEndEventHandler(cell: CellView): Function {
+        return async (): Promise<void> => {
+            if (!this.cellAlreadyMoved) {
+                this.cellAlreadyMoved = cell
+                return
+            }
+            cell.animationEnd()
+            this.cellAlreadyMoved.animationEnd()
+            this.cellAlreadyMoved = null
+        }
+    }
+
+    protected bindClickEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
-            cellView.on('click', async() => await this.move(cell.position))
+            cellView.on('click', this.createClickEventHandler(cellView))
         })
+    }
 
+    protected bindMoveEndEventHandlersOnCells(): void {
+        this.cells.forEach((cell: Cell) => {
+            const cellView: CellView = <CellView>cell
+            cellView.on('move:end', this.createMoveEndEventHandler(cellView))
+        })
+        const cellView: CellView = <CellView>this.freeCell
+        cellView.on('move:end', this.createMoveEndEventHandler(cellView))
     }
 
     protected unbindEventHandlersOnCells(): void {
@@ -59,7 +87,7 @@ export default class FieldView extends Field {
 
     async newGame(): Promise<void> {
         const result = await super.newGame()
-        this.bindEventHandlersOnCells()
+        this.bindClickEventHandlersOnCells()
         this.element.classList.add('in-game')
         return result
     }
