@@ -4,8 +4,8 @@ import {AnimationSpeed, MovingDirection} from './types'
 
 export default class CellView extends Cell {
     protected eventBus: IEventBus
-    protected currentAnimationSpeed: AnimationSpeed = AnimationSpeed.Default
     protected element: Element
+    protected newClassesForElement: string[] = []
 
     constructor(realPosition: number, data: string, eventBus: IEventBus) {
         super(realPosition, data)
@@ -39,37 +39,48 @@ export default class CellView extends Cell {
         this.eventBus.off(name)
     }
 
-    protected async animate(name: string): Promise<void> {
-        this.element.classList.add(name)
-        await new Promise((resolve: Function) => setTimeout(resolve, this.currentAnimationSpeed))
-        this.element.classList.remove(name)
+    protected async animate(classes: string[]): Promise<void> {
+        this.element.classList.add(...classes)
+        await new Promise((resolve: Function) =>
+            setTimeout(resolve, classes.includes('animate__fast') ? AnimationSpeed.Fast : AnimationSpeed.Default))
     }
 
-    async move(newPosition: number): Promise<void> {
-        let direction: MovingDirection
+    protected direction(newPosition: number): MovingDirection {
         const difference: number = newPosition - this.position
         switch (difference) {
             case -1:
-                direction = MovingDirection.Left
-                break
+                return MovingDirection.Left
             case 1:
-                direction = MovingDirection.Right
-                break
+                return MovingDirection.Right
             default:
                 if (difference > 0) {
-                    direction = MovingDirection.Down
-                    break
+                    return MovingDirection.Down
                 }
-                direction = MovingDirection.Up
+                return MovingDirection.Up
         }
-        const oldPosition: number = this.position
-        await super.move(newPosition)
-        await this.animate('animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1))
-        this.element.classList.remove(`cell${oldPosition}`)
-        this.element.classList.add(`cell${newPosition}`)
     }
 
-    set animationSpeed(value: AnimationSpeed) {
-        this.currentAnimationSpeed = value
+    async move(newPosition: number, animationClasses: string[] = []): Promise<void> {
+        const direction: MovingDirection = this.direction(newPosition)
+        this.newClassesForElement = ['cell', 'animate__animated', 'freeCell']
+        await this.animate(
+            ['animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1)]
+                .concat(animationClasses)
+        )
+        await super.move(newPosition)
+    }
+
+    moveWhileShuffling(newPosition: number): Promise<void> {
+        return this.move(newPosition, ['animate__fast']);
+    }
+
+    animationEnd() {
+        const toRemove: string[] = Array.from(this.element.classList)
+            .filter(className => !this.newClassesForElement.includes(className) && className !== `cell${this.realPosition}`)
+        this.element.classList.add(`cell${this.realPosition}`)
+        if (!toRemove) {
+            return
+        }
+        this.element.classList.remove(...toRemove)
     }
 }

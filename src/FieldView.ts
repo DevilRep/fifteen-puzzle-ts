@@ -1,6 +1,5 @@
 import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cell} from 'fifteen-puzzle-core'
 import CellView from './CellView'
-import {AnimationSpeed} from './types'
 import {Modal} from 'materialize-css'
 import * as M from 'materialize-css'
 
@@ -29,19 +28,10 @@ export default class FieldView extends Field {
         })
     }
 
-    protected init() {
+    protected init(): void {
         this.initElements()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.off('click')
-        })
+        this.unbindEventHandlersOnCells()
         super.init()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.animationSpeed = AnimationSpeed.Fast
-        })
-        const cellView: CellView = <CellView>this.freeCell
-        cellView.animationSpeed = AnimationSpeed.Fast
     }
 
     protected bindElement(): void {
@@ -52,19 +42,25 @@ export default class FieldView extends Field {
         this.element = element
     }
 
-    async newGame(): Promise<void> {
-        const result = await super.newGame()
+    protected bindEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
             cellView.on('click', async() => await this.move(cell.position))
         })
-        this.element.classList.add('in-game')
+
+    }
+
+    protected unbindEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
-            cellView.animationSpeed = AnimationSpeed.Default
+            cellView.off('click')
         })
-        const cellView: CellView = <CellView>this.freeCell
-        cellView.animationSpeed = AnimationSpeed.Default
+    }
+
+    async newGame(): Promise<void> {
+        const result = await super.newGame()
+        this.bindEventHandlersOnCells()
+        this.element.classList.add('in-game')
         return result
     }
 
@@ -77,12 +73,9 @@ export default class FieldView extends Field {
         }
     }
 
-    protected won() {
+    protected won(): void {
         this.modal.open()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.off('click')
-        })
+        this.unbindEventHandlersOnCells()
         this.element.classList.remove('in-game')
     }
 }
