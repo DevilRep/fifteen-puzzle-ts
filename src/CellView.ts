@@ -18,6 +18,7 @@ export default class CellView extends Cell {
         }
         this.element = element
         this.element.addEventListener('click', () => this.eventBus.emit('click'))
+        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
     }
 
     protected clearElementListeners(realPosition: number): void {
@@ -64,11 +65,13 @@ export default class CellView extends Cell {
     async move(newPosition: number, animationClasses: string[] = []): Promise<void> {
         const direction: MovingDirection = this.direction(newPosition)
         this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
+        this.eventBus.emit('move:start')
         await this.animate(
             ['animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1)]
                 .concat(animationClasses)
         )
         await super.move(newPosition)
+        this.eventBus.emit('move:end')
     }
 
     moveWhileShuffling(newPosition: number): Promise<void> {

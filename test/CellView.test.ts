@@ -97,6 +97,9 @@ test('start moving the cell: was event dispatched?', async () => {
         on(): void {},
         off(): void {},
         emit(name): void {
+            if (name !== 'move:start') {
+                return
+            }
             eventNames.push(name)
         }
     })
