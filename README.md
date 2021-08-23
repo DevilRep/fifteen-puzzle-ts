@@ -11,6 +11,7 @@ Rules can be found [_here_](https://en.wikipedia.org/wiki/15_puzzle)
 * [Versions](#versions)
 * [Tests](#tests)
 * [Project Status](#project-status)
+* [Roadmap](#roadmap)
 * [License](#license)
 
 
@@ -43,11 +44,20 @@ To start the game just click on the "Fifteen puzzle" on the top
 There is a few different implementations of the game:
 - 1.* - using inheritance
 
+
 ## Tests
 To run tests use this command ```yarn test```
 
+
 ## Project Status
 Project is: _in progress_
+
+
+## Roadmap
+* Move a few cells in one time
+* Creating DOM elements instead of using prepared 
+* Implement a new version based on OOP pattern decorator
+* Implement a new version based on Typescript decorators
 
 
 ## License
