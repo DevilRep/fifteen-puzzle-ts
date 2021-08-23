@@ -42,7 +42,8 @@ To start the game just click on the "Fifteen puzzle" on the top
 
 ## Versions
 There is a few different implementations of the game:
-- 1.* - using inheritance
+- 1.*, branch `inheritance` - using inheritance
+- main - the latest implementation (inheritance for now)
 
 
 ## Tests
