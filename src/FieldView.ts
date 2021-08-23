@@ -2,6 +2,7 @@ import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cel
 import CellView from './CellView'
 import {Modal} from 'materialize-css'
 import * as M from 'materialize-css'
+import {AnimationSpeed} from './types'
 
 export default class FieldView extends Field {
     protected element: Element = <Element>{}
@@ -72,10 +73,10 @@ export default class FieldView extends Field {
     protected bindMoveEndEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
-            cellView.on('move:end', this.createMoveEndEventHandler(cellView))
+            cellView.on('move:end', this.createMoveEndEventHandler(cellView).bind(this))
         })
         const cellView: CellView = <CellView>this.freeCell
-        cellView.on('move:end', this.createMoveEndEventHandler(cellView))
+        cellView.on('move:end', this.createMoveEndEventHandler(cellView).bind(this))
     }
 
     protected unbindEventHandlersOnCells(): void {
@@ -89,6 +90,8 @@ export default class FieldView extends Field {
         const result = await super.newGame()
         this.bindClickEventHandlersOnCells()
         this.element.classList.add('in-game')
+        // wait while animation is over
+        await new Promise((resolve: Function) => setTimeout(resolve, AnimationSpeed.Fast))
         return result
     }
 
