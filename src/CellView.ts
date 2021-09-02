@@ -8,19 +8,6 @@ export default class CellView extends Cell {
     protected newClassesForElement: string[] = []
     protected readonly DEFAULT_NEW_CLASSES_FOR_ELEMENT: string[] = ['cell', 'animate__animated', 'freeCell']
 
-    constructor(realPosition: number, data: string, eventBus: IEventBus) {
-        super(realPosition, data)
-        this.eventBus = eventBus
-        this.clearElementListeners(realPosition)
-        const element = document.querySelector(`.cell${realPosition}`)
-        if (!element) {
-            throw new Error('Something went wrong')
-        }
-        this.element = element
-        this.element.addEventListener('click', () => this.eventBus.emit('click'))
-        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
-    }
-
     protected clearElementListeners(realPosition: number): void {
         let element = document.querySelector(`.cell${realPosition}`)
         if (!element) {
@@ -31,14 +18,6 @@ export default class CellView extends Cell {
             throw new Error('Something went wrong')
         }
         element.parentNode.replaceChild(clone, element)
-    }
-
-    on(name: string, callback: Function): void {
-        this.eventBus.on(name, callback)
-    }
-
-    off(name: string) {
-        this.eventBus.off(name)
     }
 
     protected async animate(classes: string[]): Promise<void> {
@@ -62,6 +41,27 @@ export default class CellView extends Cell {
         }
     }
 
+    constructor(realPosition: number, data: string, eventBus: IEventBus) {
+        super(realPosition, data)
+        this.eventBus = eventBus
+        this.clearElementListeners(realPosition)
+        const element = document.querySelector(`.cell${realPosition}`)
+        if (!element) {
+            throw new Error('Something went wrong')
+        }
+        this.element = element
+        this.element.addEventListener('click', () => this.eventBus.emit('click'))
+        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
+    }
+
+    on(name: string, callback: Function): void {
+        this.eventBus.on(name, callback)
+    }
+
+    off(name: string): void {
+        this.eventBus.off(name)
+    }
+
     async move(newPosition: number, animationClasses: string[] = []): Promise<void> {
         const direction: MovingDirection = this.direction(newPosition)
         this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
@@ -78,7 +78,7 @@ export default class CellView extends Cell {
         return this.move(newPosition, ['animate__fast']);
     }
 
-    animationEnd() {
+    animationEnd(): void {
         const toRemove: string[] = Array.from(this.element.classList)
             .filter(className => !this.newClassesForElement.includes(className) && className !== `cell${this.realPosition}`)
         this.element.classList.add(`cell${this.realPosition}`)

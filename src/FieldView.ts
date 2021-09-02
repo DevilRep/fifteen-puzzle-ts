@@ -10,12 +10,6 @@ export default class FieldView extends Field {
     protected modal: Modal = <Modal>{}
     protected cellAlreadyMoved: CellView | null = null
 
-    constructor(factory: AbstractFactory) {
-        super(factory)
-        this.modal = M.Modal.init(document.querySelectorAll('.modal'))[0]
-        this.bindElement()
-    }
-
     protected initElements(): void {
         const elements: Array<Element> = Array.from(document.getElementsByClassName('cell'))
         elements.forEach(element => {
@@ -86,6 +80,18 @@ export default class FieldView extends Field {
         })
     }
 
+    protected won(): void {
+        this.modal.open()
+        this.unbindEventHandlersOnCells()
+        this.element.classList.remove('in-game')
+    }
+
+    constructor(factory: AbstractFactory) {
+        super(factory)
+        this.modal = M.Modal.init(document.querySelectorAll('.modal'))[0]
+        this.bindElement()
+    }
+
     async newGame(): Promise<void> {
         const result = await super.newGame()
         this.bindClickEventHandlersOnCells()
@@ -102,11 +108,5 @@ export default class FieldView extends Field {
         if (this.isWon) {
             this.won()
         }
-    }
-
-    protected won(): void {
-        this.modal.open()
-        this.unbindEventHandlersOnCells()
-        this.element.classList.remove('in-game')
     }
 }
