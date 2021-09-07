@@ -1,6 +1,6 @@
 {
   "name": "fifteen-puzzle-vanillajs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple version of fifteen puzzle game",
   "repository": "git@github.com:DevilRep/fifteen-puzzle-vanillajs.git",
   "author": "flaringrep@gmail.com",
