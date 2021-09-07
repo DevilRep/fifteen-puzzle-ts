@@ -1,5 +1,4 @@
 import CellView from '../src/CellView'
-import {AnimationSpeed} from '../src/types'
 
 test('adding event callback', () => {
     let hasEventCallback: boolean = false
@@ -51,7 +50,7 @@ test('testing work with DOM: animation was added', async () => {
     expect(element.classList.contains('animate__slideOutUp')).toBeTruthy()
 })
 
-test('testing work with DOM: animation was removed', async () => {
+test('testing work with DOM: animation still present after move', async () => {
     document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
@@ -60,10 +59,10 @@ test('testing work with DOM: animation was removed', async () => {
     })
     const element: Element = document.querySelector('.cell')!
     await cell.move(2)
-    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
+    expect(element.classList.contains('animate__slideOutUp')).toBeTruthy()
 })
 
-test('testing work with DOM: end position was set', async () => {
+test('testing work with DOM: class position wasn\'t set', async () => {
     document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
@@ -72,10 +71,10 @@ test('testing work with DOM: end position was set', async () => {
     })
     const element: Element = document.querySelector('.cell')!
     await cell.move(2)
-    expect(element.classList.contains('cell2')).toBeTruthy()
+    expect(element.classList.contains('cell2')).toBeFalsy()
 })
 
-test('clicking on a cell', () => {
+test('clicking on a cell: was event dispatched?', () => {
     document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const events: string[] = []
     const cell: CellView = new CellView(6, 'test', {
@@ -91,33 +90,113 @@ test('clicking on a cell', () => {
     expect(events).toEqual(['click'])
 })
 
-test('updating animation speed to fast', async () => {
+test('start moving the cell: was event dispatched?', async () => {
+    let eventNames: string[] = []
     document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
-        emit(): void {}
+        emit(name): void {
+            if (name !== 'move:start') {
+                return
+            }
+            eventNames.push(name)
+        }
     })
-    cell.animationSpeed = AnimationSpeed.Fast
-    const timeWas = Date.now()
+    cell.on('move:start', () => {})
     await cell.move(2)
-    expect(Date.now() - timeWas - AnimationSpeed.Fast).toBeLessThan(50)
+    expect(eventNames).toEqual(['move:start'])
 })
 
-test('updating animation speed: are changes work?', async () => {
+test('stop moving the cell: was event dispatched?', async () => {
+    let eventNames: string[] = []
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(name): void {
+            eventNames.push(name)
+        }
+    })
+    cell.on('move:end', () => {})
+    await cell.move(2)
+    expect(eventNames).toEqual(['move:start', 'move:end'])
+})
+
+test('moving the cell: updating position class after animation ends', async () => {
     document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
     const cell: CellView = new CellView(6, 'test', {
         on(): void {},
         off(): void {},
         emit(): void {}
     })
-    cell.animationSpeed = AnimationSpeed.Default
-    let timeWas: number = Date.now()
+    const element: Element = document.querySelector('.cell')!
     await cell.move(2)
-    const defaultSpeedDuration = Date.now() - timeWas
-    cell.animationSpeed = AnimationSpeed.Fast
-    timeWas = Date.now()
+    cell.animationEnd()
+    expect(element.classList.contains('cell2')).toBeTruthy()
+})
+
+test('moving the cell: removing animation classes after animation ends', async () => {
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
     await cell.move(2)
-    const fastSpeedDuration = Date.now() - timeWas
-    expect(defaultSpeedDuration - fastSpeedDuration).toBeGreaterThan(100)
+    cell.animationEnd()
+    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
+})
+
+test('moving the cell while shuffling: updating position class after animation ends', async () => {
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    await cell.moveWhileShuffling(2)
+    cell.animationEnd()
+    expect(element.classList.contains('cell2')).toBeTruthy()
+})
+
+test('moving the cell while shuffling: removing animation classes after animation ends', async () => {
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    await cell.moveWhileShuffling(2)
+    cell.animationEnd()
+    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
+})
+
+test('trying to end animation while it wasn\'t started: nothing happens', async () => {
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    cell.animationEnd()
+    expect(element.classList.toString()).toBe('cell cell6')
+})
+
+test('trying to end animation while it was already ended: nothing happens', async () => {
+    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
+    const cell: CellView = new CellView(6, 'test', {
+        on(): void {},
+        off(): void {},
+        emit(): void {}
+    })
+    const element: Element = document.querySelector('.cell')!
+    await cell.moveWhileShuffling(2)
+    cell.animationEnd()
+    cell.animationEnd()
+    expect(element.classList.toString()).toBe('cell cell2')
 })

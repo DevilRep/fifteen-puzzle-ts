@@ -4,20 +4,9 @@ import {AnimationSpeed, MovingDirection} from './types'
 
 export default class CellView extends Cell {
     protected eventBus: IEventBus
-    protected currentAnimationSpeed: AnimationSpeed = AnimationSpeed.Default
     protected element: Element
-
-    constructor(realPosition: number, data: string, eventBus: IEventBus) {
-        super(realPosition, data)
-        this.eventBus = eventBus
-        this.clearElementListeners(realPosition)
-        const element = document.querySelector(`.cell${realPosition}`)
-        if (!element) {
-            throw new Error('Something went wrong')
-        }
-        this.element = element
-        this.element.addEventListener('click', () => this.eventBus.emit('click'))
-    }
+    protected newClassesForElement: string[] = []
+    protected readonly DEFAULT_NEW_CLASSES_FOR_ELEMENT: string[] = ['cell', 'animate__animated', 'freeCell']
 
     protected clearElementListeners(realPosition: number): void {
         let element = document.querySelector(`.cell${realPosition}`)
@@ -31,45 +20,71 @@ export default class CellView extends Cell {
         element.parentNode.replaceChild(clone, element)
     }
 
+    protected async animate(classes: string[]): Promise<void> {
+        this.element.classList.add(...classes)
+        await new Promise((resolve: Function) =>
+            setTimeout(resolve, classes.includes('animate__fast') ? AnimationSpeed.Fast : AnimationSpeed.Default))
+    }
+
+    protected direction(newPosition: number): MovingDirection {
+        const difference: number = newPosition - this.position
+        switch (difference) {
+            case -1:
+                return MovingDirection.Left
+            case 1:
+                return MovingDirection.Right
+            default:
+                if (difference > 0) {
+                    return MovingDirection.Down
+                }
+                return MovingDirection.Up
+        }
+    }
+
+    constructor(realPosition: number, data: string, eventBus: IEventBus) {
+        super(realPosition, data)
+        this.eventBus = eventBus
+        this.clearElementListeners(realPosition)
+        const element = document.querySelector(`.cell${realPosition}`)
+        if (!element) {
+            throw new Error('Something went wrong')
+        }
+        this.element = element
+        this.element.addEventListener('click', () => this.eventBus.emit('click'))
+        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
+    }
+
     on(name: string, callback: Function): void {
         this.eventBus.on(name, callback)
     }
 
-    off(name: string) {
+    off(name: string): void {
         this.eventBus.off(name)
     }
 
-    protected async animate(name: string): Promise<void> {
-        this.element.classList.add(name)
-        await new Promise((resolve: Function) => setTimeout(resolve, this.currentAnimationSpeed))
-        this.element.classList.remove(name)
-    }
-
-    async move(newPosition: number): Promise<void> {
-        let direction: MovingDirection
-        const difference: number = newPosition - this.position
-        switch (difference) {
-            case -1:
-                direction = MovingDirection.Left
-                break
-            case 1:
-                direction = MovingDirection.Right
-                break
-            default:
-                if (difference > 0) {
-                    direction = MovingDirection.Down
-                    break
-                }
-                direction = MovingDirection.Up
-        }
-        const oldPosition: number = this.position
+    async move(newPosition: number, animationClasses: string[] = []): Promise<void> {
+        const direction: MovingDirection = this.direction(newPosition)
+        this.newClassesForElement = this.DEFAULT_NEW_CLASSES_FOR_ELEMENT
+        this.eventBus.emit('move:start')
+        await this.animate(
+            ['animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1)]
+                .concat(animationClasses)
+        )
         await super.move(newPosition)
-        await this.animate('animate__slideOut' + direction.charAt(0).toUpperCase() + direction.slice(1))
-        this.element.classList.remove(`cell${oldPosition}`)
-        this.element.classList.add(`cell${newPosition}`)
+        this.eventBus.emit('move:end')
     }
 
-    set animationSpeed(value: AnimationSpeed) {
-        this.currentAnimationSpeed = value
+    moveWhileShuffling(newPosition: number): Promise<void> {
+        return this.move(newPosition, ['animate__fast']);
+    }
+
+    animationEnd(): void {
+        const toRemove: string[] = Array.from(this.element.classList)
+            .filter(className => !this.newClassesForElement.includes(className) && className !== `cell${this.realPosition}`)
+        this.element.classList.add(`cell${this.realPosition}`)
+        if (!toRemove) {
+            return
+        }
+        this.element.classList.remove(...toRemove)
     }
 }

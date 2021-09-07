@@ -1,19 +1,14 @@
 import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cell} from 'fifteen-puzzle-core'
 import CellView from './CellView'
-import {AnimationSpeed} from './types'
 import {Modal} from 'materialize-css'
 import * as M from 'materialize-css'
+import {AnimationSpeed} from './types'
 
 export default class FieldView extends Field {
     protected element: Element = <Element>{}
     protected readonly MOVE_ALL_RANDOM_ROUNDS: number = 30
     protected modal: Modal = <Modal>{}
-
-    constructor(factory: AbstractFactory) {
-        super(factory)
-        this.modal = M.Modal.init(document.querySelectorAll('.modal'))[0]
-        this.bindElement()
-    }
+    protected cellAlreadyMoved: CellView | null = null
 
     protected initElements(): void {
         const elements: Array<Element> = Array.from(document.getElementsByClassName('cell'))
@@ -29,19 +24,11 @@ export default class FieldView extends Field {
         })
     }
 
-    protected init() {
+    protected init(): void {
         this.initElements()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.off('click')
-        })
+        this.unbindEventHandlersOnCells()
         super.init()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.animationSpeed = AnimationSpeed.Fast
-        })
-        const cellView: CellView = <CellView>this.freeCell
-        cellView.animationSpeed = AnimationSpeed.Fast
+        this.bindMoveEndEventHandlersOnCells()
     }
 
     protected bindElement(): void {
@@ -52,19 +39,65 @@ export default class FieldView extends Field {
         this.element = element
     }
 
-    async newGame(): Promise<void> {
-        const result = await super.newGame()
+    protected createClickEventHandler(cell: Cell): Function {
+        return async (): Promise<void> => {
+            return await this.move(cell.position)
+        }
+    }
+
+    protected createMoveEndEventHandler(cell: CellView): Function {
+        return async (): Promise<void> => {
+            if (!this.cellAlreadyMoved) {
+                this.cellAlreadyMoved = cell
+                return
+            }
+            cell.animationEnd()
+            this.cellAlreadyMoved.animationEnd()
+            this.cellAlreadyMoved = null
+        }
+    }
+
+    protected bindClickEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
-            cellView.on('click', async() => await this.move(cell.position))
+            cellView.on('click', this.createClickEventHandler(cellView))
         })
-        this.element.classList.add('in-game')
+    }
+
+    protected bindMoveEndEventHandlersOnCells(): void {
         this.cells.forEach((cell: Cell) => {
             const cellView: CellView = <CellView>cell
-            cellView.animationSpeed = AnimationSpeed.Default
+            cellView.on('move:end', this.createMoveEndEventHandler(cellView).bind(this))
         })
         const cellView: CellView = <CellView>this.freeCell
-        cellView.animationSpeed = AnimationSpeed.Default
+        cellView.on('move:end', this.createMoveEndEventHandler(cellView).bind(this))
+    }
+
+    protected unbindEventHandlersOnCells(): void {
+        this.cells.forEach((cell: Cell) => {
+            const cellView: CellView = <CellView>cell
+            cellView.off('click')
+        })
+    }
+
+    protected won(): void {
+        this.modal.open()
+        this.unbindEventHandlersOnCells()
+        this.element.classList.remove('in-game')
+    }
+
+    constructor(factory: AbstractFactory) {
+        super(factory)
+        this.modal = M.Modal.init(document.querySelectorAll('.modal'))[0]
+        this.bindElement()
+    }
+
+    async newGame(): Promise<void> {
+        const result = await super.newGame()
+        this.bindClickEventHandlersOnCells()
+        this.element.classList.add('in-game')
+        // wait while animation is over
+        await new Promise((resolve: Function) => setTimeout(resolve, AnimationSpeed.Fast))
         return result
     }
 
@@ -75,14 +108,5 @@ export default class FieldView extends Field {
         if (this.isWon) {
             this.won()
         }
-    }
-
-    protected won() {
-        this.modal.open()
-        this.cells.forEach((cell: Cell) => {
-            const cellView: CellView = <CellView>cell
-            cellView.off('click')
-        })
-        this.element.classList.remove('in-game')
     }
 }
