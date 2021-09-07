@@ -1,5 +1,5 @@
 # Release Notes
-## [Unreleased](https://github.com/DevilRep/fifteen-puzzle-vanillats/compare/v1.0.0...inheritance)
+## [Unreleased](https://github.com/DevilRep/fifteen-puzzle-vanillats/compare/v1.0.1...inheritance)
 
 
 ## [1.0.1](https://github.com/DevilRep/fifteen-puzzle-vanillats/compare/v1.0.0...inheritance)
