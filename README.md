@@ -45,6 +45,7 @@ There is a few different implementations of the game:
 - 1.*, branch `inheritance` - using inheritance
 - main - the latest implementation (inheritance for now)
 
+More info can be found [_here_](https://github.com/DevilRep/fifteen-puzzle-ts/wiki)
 
 ## Tests
 To run tests use this command ```yarn test```
