@@ -84,3 +84,4 @@ node_modules
 /.idea/vanillajs.iml
 /dist/
 /.idea/vanillats.iml
+/.idea/ts.iml
