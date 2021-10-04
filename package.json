@@ -31,7 +31,7 @@
   "dependencies": {
     "@types/materialize-css": "^1.0.11",
     "animate.css": "^4.1.1",
-    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#semver:^1.x",
+    "fifteen-puzzle-core": "https://github.com/DevilRep/fifteen-puzzle-core.git#decorators",
     "materialize-css": "^1.0.0"
   }
 }
