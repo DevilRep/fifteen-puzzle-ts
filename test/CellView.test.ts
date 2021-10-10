@@ -1,202 +1,137 @@
 import CellView from '../src/CellView'
+import Style from '../src/Style';
 
-test('adding event callback', () => {
-    let hasEventCallback: boolean = false
-    document.body.innerHTML = '<div><div class="cell cell1"></div></div>'
-    const cell: CellView = new CellView(1, 'test', {
-        on(): void { hasEventCallback = true },
-        off(): void {},
-        emit(): void {}
-    })
-    cell.on('test1', () => {})
-    expect(hasEventCallback).toBeTruthy()
-})
-
-test('removing callback ', () => {
-    let isEventCallbackRemoved: boolean = false
-    document.body.innerHTML = '<div><div class="cell cell1"></div></div>'
-    const cell: CellView = new CellView(1, 'test', {
-        on(): void {},
-        off(): void { isEventCallbackRemoved = true },
-        emit(): void {}
-    })
-    cell.on('test1', () => {})
-    cell.off('test1')
-    expect(isEventCallbackRemoved).toBeTruthy()
-})
-
-test('testing work with DOM: start position was set', () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    cell.on('move:start', () => {})
-    const element: Element = document.querySelector('.cell')!
-    expect(element.classList.contains('cell6')).toBeTruthy()
-})
-
-test('testing work with DOM: animation was added', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    cell.move(2) // there shouldn't be await - the animation works only when a cell is moving
-    await new Promise((resolve: Function) => setTimeout(resolve, 50))
-    expect(element.classList.contains('animate__slideOutUp')).toBeTruthy()
-})
-
-test('testing work with DOM: animation still present after move', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.move(2)
-    expect(element.classList.contains('animate__slideOutUp')).toBeTruthy()
-})
-
-test('testing work with DOM: class position wasn\'t set', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.move(2)
-    expect(element.classList.contains('cell2')).toBeFalsy()
-})
-
-test('clicking on a cell: was event dispatched?', () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const events: string[] = []
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(name): void {
-            events.push(name)
+test('creating the element while creating the cell', () => {
+    const mock =  jest.fn()
+    new CellView(
+        {
+            display: '1',
+            position: 1,
+            move: jest.fn(),
+            moveWhileShuffling: jest.fn()
+        },
+        {
+            on: jest.fn(),
+            off: jest.fn(),
+            emit: jest.fn()
+        },
+        {
+            querySelector: jest.fn(),
+            querySelectorAll: jest.fn(),
+            getElementsByClassName: jest.fn()
+        },
+        {
+            create: mock
         }
-    })
-    cell.on('move:start', () => {})
-    const element: Element = document.querySelector('.cell')!
-    element.dispatchEvent(new Event('click'))
-    expect(events).toEqual(['click'])
+    )
+    expect(mock).toBeCalled()
 })
 
-test('start moving the cell: was event dispatched?', async () => {
-    let eventNames: string[] = []
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(name): void {
-            if (name !== 'move:start') {
-                return
-            }
-            eventNames.push(name)
+test('using the document while creating the cell', () => {
+    const mock =  jest.fn()
+    new CellView(
+        {
+            display: '1',
+            position: 1,
+            move: jest.fn(),
+            moveWhileShuffling: jest.fn()
+        },
+        {
+            on: jest.fn(),
+            off: jest.fn(),
+            emit: jest.fn()
+        },
+        {
+            querySelector: mock,
+            querySelectorAll: jest.fn(),
+            getElementsByClassName: mock
+        },
+        {
+            create: jest.fn()
         }
-    })
-    cell.on('move:start', () => {})
-    await cell.move(2)
-    expect(eventNames).toEqual(['move:start'])
+    )
+    expect(mock).toBeCalled()
 })
 
-test('stop moving the cell: was event dispatched?', async () => {
-    let eventNames: string[] = []
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(name): void {
-            eventNames.push(name)
+test('reacting on animation:start', async () => {
+    let eventName = ''
+    new CellView(
+        {
+            display: '1',
+            position: 1,
+            move: jest.fn(),
+            moveWhileShuffling: jest.fn()
+        },
+        {
+            on: data => eventName || (eventName = data),
+            off: jest.fn(),
+            emit: jest.fn()
+        },
+        {
+            querySelector: jest.fn(),
+            querySelectorAll: jest.fn(),
+            getElementsByClassName: jest.fn()
+        },
+        {
+            create: jest.fn()
         }
-    })
-    cell.on('move:end', () => {})
-    await cell.move(2)
-    expect(eventNames).toEqual(['move:start', 'move:end'])
+    )
+    expect(eventName).toBe('animation:start')
 })
 
-test('moving the cell: updating position class after animation ends', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.move(2)
-    cell.animationEnd()
-    expect(element.classList.contains('cell2')).toBeTruthy()
+test('reacting on animation:end', async () => {
+    let eventName = ''
+    new CellView(
+        {
+            display: '1',
+            position: 1,
+            move: jest.fn(),
+            moveWhileShuffling: jest.fn()
+        },
+        {
+            on: data => eventName = data,
+            off: jest.fn(),
+            emit: jest.fn()
+        },
+        {
+            querySelector: jest.fn(),
+            querySelectorAll: jest.fn(),
+            getElementsByClassName: jest.fn()
+        },
+        {
+            create: jest.fn()
+        }
+    )
+    expect(eventName).toBe('animation:end')
 })
 
-test('moving the cell: removing animation classes after animation ends', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.move(2)
-    cell.animationEnd()
-    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
-})
-
-test('moving the cell while shuffling: updating position class after animation ends', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.moveWhileShuffling(2)
-    cell.animationEnd()
-    expect(element.classList.contains('cell2')).toBeTruthy()
-})
-
-test('moving the cell while shuffling: removing animation classes after animation ends', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.moveWhileShuffling(2)
-    cell.animationEnd()
-    expect(element.classList.contains('animate__slideOutUp')).toBeFalsy()
-})
-
-test('trying to end animation while it wasn\'t started: nothing happens', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    cell.animationEnd()
-    expect(element.classList.toString()).toBe('cell cell6')
-})
-
-test('trying to end animation while it was already ended: nothing happens', async () => {
-    document.body.innerHTML = '<div><div class="cell cell6"></div></div>'
-    const cell: CellView = new CellView(6, 'test', {
-        on(): void {},
-        off(): void {},
-        emit(): void {}
-    })
-    const element: Element = document.querySelector('.cell')!
-    await cell.moveWhileShuffling(2)
-    cell.animationEnd()
-    cell.animationEnd()
-    expect(element.classList.toString()).toBe('cell cell2')
+test('adding classes when emit style:update', async () => {
+    let callbackToBeCalled: Function = jest.fn()
+    const mock = new Element()
+    mock.classList.add('test1')
+    new CellView(
+        {
+            display: '1',
+            position: 1,
+            move: jest.fn(),
+            moveWhileShuffling: jest.fn()
+        },
+        {
+            on: (name, callback) => name === 'style:update' && (callbackToBeCalled = callback),
+            off: jest.fn(),
+            emit: jest.fn()
+        },
+        {
+            querySelector: jest.fn(),
+            querySelectorAll: jest.fn(),
+            getElementsByClassName: jest.fn()
+        },
+        {
+            create: () => mock
+        }
+    )
+    const style = new Style()
+    style.classes = ['test2']
+    callbackToBeCalled(style)
+    expect(mock.classList).toEqual(['cell1', 'animated', 'test2'])
 })
