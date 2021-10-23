@@ -1,5 +1,5 @@
 import {AbstractFactoryInterface as AbstractFactory, Field, CellInterface as Cell} from 'fifteen-puzzle-core'
-import CellView from './CellView'
+import CellView from './cellDecorators/CellView'
 import {Modal} from 'materialize-css'
 import * as M from 'materialize-css'
 import {AnimationSpeed} from './types'

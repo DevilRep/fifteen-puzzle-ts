@@ -1,7 +1,7 @@
-import AnimatedFlexCell from '../src/AnimatedFlexCell';
+import AnimatedCell from '../src/cellDecorators/AnimatedCell';
 
 test('adding direction class when move started: move right', () => {
-    const cell: AnimatedFlexCell = new AnimatedFlexCell({
+    const cell: AnimatedCell = new AnimatedCell({
         display: '1',
         position: 1,
         move: jest.fn().mockResolvedValue(Promise.resolve()),
@@ -12,7 +12,7 @@ test('adding direction class when move started: move right', () => {
 })
 
 test('adding direction class when move started: move down', () => {
-    const cell: AnimatedFlexCell = new AnimatedFlexCell({
+    const cell: AnimatedCell = new AnimatedCell({
         display: '1',
         position: 1,
         move: jest.fn().mockResolvedValue(Promise.resolve()),
@@ -23,7 +23,7 @@ test('adding direction class when move started: move down', () => {
 })
 
 test('adding direction class when move started: move left', () => {
-    const cell: AnimatedFlexCell = new AnimatedFlexCell({
+    const cell: AnimatedCell = new AnimatedCell({
         display: '2',
         position: 2,
         move: jest.fn().mockResolvedValue(Promise.resolve()),
@@ -34,7 +34,7 @@ test('adding direction class when move started: move left', () => {
 })
 
 test('adding direction class when move started: move up', () => {
-    const cell: AnimatedFlexCell = new AnimatedFlexCell({
+    const cell: AnimatedCell = new AnimatedCell({
         display: '5',
         position: 5,
         move: jest.fn().mockResolvedValue(Promise.resolve()),
@@ -45,7 +45,7 @@ test('adding direction class when move started: move up', () => {
 })
 
 test('adding position class after move', async () => {
-    const cell: AnimatedFlexCell = new AnimatedFlexCell({
+    const cell: AnimatedCell = new AnimatedCell({
         display: '1',
         position: 1,
         move: jest.fn().mockResolvedValue(Promise.resolve()),

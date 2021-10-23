@@ -1,7 +1,7 @@
 import {AbstractCellDecorator, CellInterface} from 'fifteen-puzzle-core'
-import Style from './Style';
+import Style from '../Style';
 
-export default class AnimatedFlexCell extends AbstractCellDecorator {
+export default class AnimatedCell extends AbstractCellDecorator {
     public style: Style = <Style>{}
 
     constructor(cell: CellInterface) {

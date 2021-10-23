@@ -1,4 +1,4 @@
-import CellView from '../src/CellView'
+import CellView from '../src/cellDecorators/CellView'
 import Style from '../src/Style';
 
 test('creating the element while creating the cell', () => {

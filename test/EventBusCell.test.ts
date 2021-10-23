@@ -1,4 +1,4 @@
-import EventBusCell from '../src/EventBusCell'
+import EventBusCell from '../src/cellDecorators/EventBusCell'
 
 test('emitting default event before move', async () => {
     let eventName = ''

@@ -22,7 +22,7 @@ const template = `
     </div>
     `
 
-test('creating a field: are all cells on the field?', () => {
+test('creating a field: are all cellDecorators on the field?', () => {
     document.body.innerHTML = template
     const field: FieldView = new FieldView(new CellView())
     expect(field.toString()).toBe('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16')

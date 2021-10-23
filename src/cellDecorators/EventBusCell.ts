@@ -1,5 +1,5 @@
 import {AbstractCellDecorator, CellInterface} from 'fifteen-puzzle-core';
-import IEventBus from './interfaces/EventBus'
+import IEventBus from '../interfaces/EventBus'
 
 export default class EventBusCell extends AbstractCellDecorator {
     public prefixBeforeMove: string = 'move'
